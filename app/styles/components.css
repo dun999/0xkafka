@@ -1,0 +1,362 @@
+/* Base and shared component styles. Values come from tokens.css only. */
+
+html,
+body {
+  background-color: var(--bg-canvas);
+  color: var(--fg-primary);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--side-a-subtle);
+}
+
+/* Display type: the same sans, heavier and tighter. (Class names kept from the old serif.) */
+.serif {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.serif-i {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* In the base layer, so a component's own focus style (focus-visible:outline-none) can replace it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Type helpers ─────────────────────────────────────────────────────────── */
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.005em;
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+.label {
+  font-size: var(--text-label);
+  font-weight: 500;
+  color: var(--fg-tertiary);
+}
+
+.eyebrow {
+  font-size: var(--text-label);
+  font-weight: 500;
+  color: var(--fg-tertiary);
+}
+
+/* ── Shape (legacy class names) ─────────────────────────────────────────── */
+.cut {
+  border-radius: var(--radius-sm);
+}
+.cut-outline {
+  position: relative;
+  isolation: isolate;
+  background: var(--cut-border, var(--border-strong));
+}
+.cut-outline::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: calc(var(--radius-sm) - 1px);
+  background: var(--cut-fill, var(--bg-surface));
+  transition: background var(--duration-base) var(--ease-out);
+}
+
+.rule-double,
+.rule {
+  border-top: 1px solid var(--border-default);
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+.panel,
+.envelope {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sheet);
+  min-width: 0;
+}
+.envelope {
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out);
+}
+a.envelope:hover,
+button.envelope:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
+}
+.envelope-flap {
+  display: none;
+}
+.panel-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--panel-header-h);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-default);
+}
+.panel-f {
+  border-top: 1px solid var(--border-default);
+  padding: 10px 16px;
+  font-size: var(--text-caption);
+  color: var(--fg-tertiary);
+}
+
+/* ── Table ────────────────────────────────────────────────────────────────── */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tbl th {
+  font-size: var(--text-micro);
+  font-weight: 500;
+  color: var(--fg-tertiary);
+  text-align: left;
+  padding: 0 14px;
+  height: var(--table-head-h);
+  border-bottom: 1px solid var(--border-default);
+  white-space: nowrap;
+}
+.tbl td {
+  padding: 0 14px;
+  height: var(--table-row-h);
+  border-bottom: 1px solid var(--border-default);
+  vertical-align: middle;
+}
+.tbl tr:last-child td {
+  border-bottom: 0;
+}
+.tbl tbody tr:hover td {
+  background: var(--bg-hover);
+}
+.tbl .r {
+  text-align: right;
+}
+
+/* A sealed value: a soft bar where the pick will be. */
+.sealed {
+  background: repeating-linear-gradient(-45deg, var(--bg-muted) 0 6px, var(--bg-subtle) 6px 12px);
+  border-radius: var(--radius-xs);
+}
+
+/* ── Range slider ─────────────────────────────────────────────────────────── */
+input[type='range'].range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+  --fill: 30%;
+}
+input[type='range'].range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--fg-primary) var(--fill), var(--bg-muted) var(--fill));
+}
+input[type='range'].range::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-muted);
+}
+input[type='range'].range::-moz-range-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fg-primary);
+}
+input[type='range'].range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -8px;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  border: 2px solid var(--fg-primary);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.18);
+}
+input[type='range'].range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  border: 2px solid var(--fg-primary);
+}
+input[type='range'].range:focus-visible {
+  outline: none;
+}
+input[type='range'].range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Status pill: called it / missed / sealed / void ─────────────────────── */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 88px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+.stamp-won {
+  color: var(--signal-positive);
+  background: var(--signal-positive-subtle);
+}
+.stamp-missed {
+  color: var(--signal-negative);
+  background: var(--signal-negative-subtle);
+}
+.stamp-sealed {
+  color: var(--fg-secondary);
+  background: var(--bg-subtle);
+}
+
+.retired {
+  text-decoration: line-through;
+  text-decoration-color: var(--fg-quaternary);
+  color: var(--fg-tertiary);
+}
+
+a.u {
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+}
+a.u:hover {
+  text-decoration-color: currentColor;
+}
+
+pre.code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Grid and flex children may shrink below their content; wide tables scroll inside their card instead of widening the page. */
+.grid > * {
+  min-width: 0;
+}
+
+.bg-blueprint {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: -1px -1px;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 80s linear infinite;
+}
+
+/* The wax is pressed: it lands a little large, then settles. */
+@keyframes seal-press {
+  0% {
+    transform: scale(1.35) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.96) rotate(1deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+.seal-press {
+  animation: seal-press 560ms var(--ease-stamp) both;
+}
+
+@keyframes stamp-thump {
+  0% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.stamp-thump {
+  animation: stamp-thump 360ms var(--ease-stamp) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .seal-press,
+  .stamp-thump {
+    animation: none;
+  }
+  .envelope {
+    transition: none;
+  }
+}
+
+/* dApp Kit's wallet modal, in the same theme. */
+mysten-dapp-kit-connect-modal,
+mysten-dapp-kit-connect-button {
+  --background: var(--bg-raised);
+  --foreground: var(--fg-primary);
+  --primary: var(--action-primary);
+  --primary-foreground: var(--action-on-primary);
+  --secondary: var(--bg-subtle);
+  --secondary-foreground: var(--fg-primary);
+  --accent: var(--bg-subtle);
+  --accent-foreground: var(--fg-primary);
+  --muted: var(--bg-subtle);
+  --muted-foreground: var(--fg-tertiary);
+  --border: var(--border-default);
+  --popover: var(--bg-raised);
+  --popover-foreground: var(--fg-primary);
+  --ring: var(--border-focus);
+  --radius: var(--radius-sm);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes fx-fallback {
+  to {
+    visibility: visible;
+  }
+}
+.js [data-fx='load'] {
+  visibility: hidden;
+  animation: fx-fallback 0s linear 2.5s forwards;
+}

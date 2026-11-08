@@ -1,0 +1,208 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   0xkafka design tokens
+
+   Calm, high-contrast, and the same on every screen. Follows the system
+   theme (dark or light); [data-theme] on <html> can force either.
+   Every semantic token is one light-dark() pair, so a mode can't drift.
+
+     1. Semantic   named by role (bg-surface, fg-secondary, seal, side-a …)
+     2. Component  one component's own values (row height, radius …)
+
+   Hue only ever carries meaning:
+     seal                 wax red: a sealed pick and the one "Seal it" action
+     side-a / side-b      the two outcomes of a question, neither good nor bad
+     positive / negative  called it / missed
+     memory               Walrus Memory
+     money                USDC
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light dark;
+}
+[data-theme='light'] {
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* 1 · Semantic ───────────────────────────────────────────────────────────── */
+:root {
+  --bg-canvas: light-dark(#f5f6f8, #0d0f13);
+  --bg-surface: light-dark(#ffffff, #15181e);
+  --bg-raised: light-dark(#ffffff, #1b1f27);
+  --bg-subtle: light-dark(#f0f2f5, #1f242d);
+  --bg-muted: light-dark(#e6e9ee, #2a303a);
+  --bg-inverse: light-dark(#0f1217, #eef0f4);
+  --bg-hover: light-dark(#f7f8fa, #1a1e25);
+
+  --fg-primary: light-dark(#0f1217, #eef0f4);
+  --fg-secondary: light-dark(#3f4654, #b6bdc9);
+  --fg-tertiary: light-dark(#667085, #8a93a3);
+  --fg-quaternary: light-dark(#98a0ad, #5e6674);
+  --fg-inverse: light-dark(#ffffff, #0d0f13);
+
+  --border-default: light-dark(#e4e7ec, #242a33);
+  --border-strong: light-dark(#cfd4dc, #333a46);
+  --border-ink: light-dark(#0f1217, #eef0f4);
+  --border-focus: light-dark(#2f64f5, #6b96ff);
+
+  --action-primary: light-dark(#0f1217, #eef0f4);
+  --action-primary-hover: light-dark(#2a303a, #ffffff);
+  --action-on-primary: light-dark(#ffffff, #0d0f13);
+
+  --seal: light-dark(#d23b33, #ef5a4f);
+  --seal-hover: light-dark(#b8302a, #ff6e63);
+  --seal-subtle: light-dark(#fdebea, #2c1716);
+  --on-seal: #ffffff;
+
+  --side-a: light-dark(#2f64f5, #6b96ff);
+  --side-a-subtle: light-dark(#eaf0ff, #1a2440);
+  --side-b: light-dark(#d9730d, #f2a25c);
+  --side-b-subtle: light-dark(#fdf1e5, #33240f);
+  /* Solid fills that carry white text. */
+  --side-a-solid: light-dark(#2f64f5, #3864e6);
+  --side-b-solid: light-dark(#d9730d, #c4620c);
+
+  --signal-positive: light-dark(#138a4b, #3dd68c);
+  --signal-positive-subtle: light-dark(#e6f6ec, #13281d);
+  --signal-negative: light-dark(#d1333b, #ff6b70);
+  --signal-negative-subtle: light-dark(#fdecec, #2e1719);
+  --stamp-missed: var(--signal-negative);
+
+  --domain-memory: light-dark(#0b7f8f, #5fd0dc);
+  --domain-memory-subtle: light-dark(#e3f5f7, #11282c);
+  --domain-money: light-dark(#a16207, #f4c15a);
+  --domain-money-subtle: light-dark(#fdf4e1, #2d2410);
+
+  --viz-blue: var(--side-a);
+  --viz-orange: var(--side-b);
+  --viz-aqua: var(--domain-memory);
+
+  --grid-line: var(--border-default);
+  --shadow-sheet: light-dark(0 1px 2px rgb(16 24 40 / 0.05), 0 0 0 transparent);
+  --shadow-lift: light-dark(0 10px 30px -12px rgb(16 24 40 / 0.18), 0 12px 32px -12px rgb(0 0 0 / 0.6));
+}
+
+/* 2 · Component tokens ───────────────────────────────────────────────────── */
+:root {
+  --shell-h: 60px;
+  --shell-max: 1240px;
+  --panel-header-h: 48px;
+  --table-head-h: 40px;
+  --table-row-h: 52px;
+  --button-h-sm: 34px;
+  --button-h-md: 40px;
+  --button-h-lg: 48px;
+  --chip-h: 26px;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* Legacy names, still referenced by a few components. */
+  --cut-xs: 6px;
+  --cut-sm: 10px;
+  --cut-md: 14px;
+  --cut-lg: 20px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-stamp: cubic-bezier(0.2, 1.3, 0.4, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 500ms;
+}
+
+/* Tailwind bindings: utilities resolve to the semantic layer, so they follow the mode. */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-raised: var(--bg-raised);
+  --color-subtle: var(--bg-subtle);
+  --color-muted: var(--bg-muted);
+  --color-inverse: var(--bg-inverse);
+  --color-hover: var(--bg-hover);
+
+  --color-fg: var(--fg-primary);
+  --color-fg-2: var(--fg-secondary);
+  --color-fg-3: var(--fg-tertiary);
+  --color-fg-4: var(--fg-quaternary);
+  --color-fg-inverse: var(--fg-inverse);
+
+  --color-line: var(--border-default);
+  --color-line-strong: var(--border-strong);
+  --color-line-ink: var(--border-ink);
+
+  --color-action: var(--action-primary);
+  --color-action-hover: var(--action-primary-hover);
+  --color-on-action: var(--action-on-primary);
+
+  --color-seal: var(--seal);
+  --color-seal-hover: var(--seal-hover);
+  --color-seal-subtle: var(--seal-subtle);
+  --color-on-seal: var(--on-seal);
+
+  --color-side-a: var(--side-a);
+  --color-side-a-subtle: var(--side-a-subtle);
+  --color-side-b: var(--side-b);
+  --color-side-b-subtle: var(--side-b-subtle);
+  --color-side-a-solid: var(--side-a-solid);
+  --color-side-b-solid: var(--side-b-solid);
+
+  --color-positive: var(--signal-positive);
+  --color-positive-subtle: var(--signal-positive-subtle);
+  --color-negative: var(--signal-negative);
+  --color-negative-subtle: var(--signal-negative-subtle);
+  --color-missed: var(--stamp-missed);
+  --color-memory: var(--domain-memory);
+  --color-memory-subtle: var(--domain-memory-subtle);
+  --color-money: var(--domain-money);
+  --color-money-subtle: var(--domain-money-subtle);
+
+  --color-viz-1: var(--viz-blue);
+  --color-viz-2: var(--viz-orange);
+  --color-viz-3: var(--viz-aqua);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+/* Type scale: one sans, readable sizes, tight tracking only on large type. */
+@theme {
+  --text-display: 64px;
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-display-sm: 40px;
+  --text-display-sm--line-height: 1.08;
+  --text-display-sm--letter-spacing: -0.03em;
+  --text-headline: 28px;
+  --text-headline--line-height: 1.15;
+  --text-headline--letter-spacing: -0.025em;
+  --text-title-1: 21px;
+  --text-title-1--line-height: 1.25;
+  --text-title-1--letter-spacing: -0.02em;
+  --text-title-2: 17px;
+  --text-title-2--line-height: 1.35;
+  --text-title-2--letter-spacing: -0.012em;
+  --text-title-3: 15.5px;
+  --text-title-3--line-height: 1.35;
+  --text-title-3--letter-spacing: -0.008em;
+  --text-body: 15px;
+  --text-body--line-height: 1.55;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.5;
+  --text-caption: 13px;
+  --text-caption--line-height: 1.45;
+  --text-micro: 12px;
+  --text-micro--line-height: 1.4;
+  --text-label: 12.5px;
+  --text-label--line-height: 1.35;
+}

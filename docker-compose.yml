@@ -1,0 +1,27 @@
+# Web and worker: one image, sharing one SQLite file in ./data. Caddy on the host
+# terminates TLS for 0xkafka.xyz and proxies to the web app on 127.0.0.1:3030.
+# Walrus stays the source of truth: on an empty ./data, run
+# `docker compose run --rm worker pnpm kafka:wake` to restore 0xkafka's mind.
+services:
+  web:
+    build: .
+    image: 0xkafka:latest
+    env_file: .env
+    environment:
+      KAFKA_DB: /data/kafka.db
+    ports:
+      - "127.0.0.1:3030:3000"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+  worker:
+    image: 0xkafka:latest
+    command: ["pnpm", "worker"]
+    env_file: .env
+    environment:
+      KAFKA_DB: /data/kafka.db
+    volumes:
+      - ./data:/data
+    depends_on:
+      - web
+    restart: unless-stopped
