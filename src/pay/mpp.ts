@@ -3,7 +3,7 @@ import { verifyPersonalMessageSignature } from '@mysten/sui/verify';
 import { suiCharge, USDC } from '@suimpp/mpp';
 import { Credential, Method, Receipt } from 'mppx';
 import { Mppx } from 'mppx/server';
-import { rpcCall, suiRpc } from '../chain/tatum';
+import { suiRpc } from '../chain/tatum';
 import { config } from '../config';
 import { db, logActivity, nowIso } from '../db/client';
 
@@ -69,10 +69,9 @@ function tatumVerifiedSui(recipient: string) {
       }
 
       const client = suiRpc();
-      const tx = await withRetry(() => {
-        rpcCall('GetTransaction');
-        return client.core.getTransaction({ digest, include: { balanceChanges: true, transaction: true, effects: true } });
-      }).catch(() => {
+      const tx = await withRetry(() =>
+        client.core.getTransaction({ digest, include: { balanceChanges: true, transaction: true, effects: true } }),
+      ).catch(() => {
         throw new Error(`Transaction ${digest} not found on Sui`);
       });
       const t = tx.Transaction ?? tx.FailedTransaction;
